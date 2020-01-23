@@ -1,9 +1,14 @@
 'use strict';
 
-const reqAll = require('req-all');
+const fs = require('fs');
+const path = require('path');
 const createIndex = require('create-eslint-index');
 
-const rules = reqAll('rules', {camelize: false});
+const rules = {};
+for (const file of fs.readdirSync(`${__dirname}/rules`)) {
+  const ruleName = path.basename(file, path.extname(file));
+  rules[ruleName] = require(`./rules/${ruleName}`);
+}
 
 const externalRecommendedRules = {
   'no-var': 'error'
